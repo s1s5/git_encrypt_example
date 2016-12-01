@@ -1,6 +1,9 @@
 - .passwordを作成
--- saltは24 or less hex characters
--- パスワードは適当に,イカのような.passwordファイルを作成する
+
+-- saltは24字以下の16進数
+
+-- パスワードは適当に,以下のような.passwordファイルを作成する
+
 ```
 <salt>
 <password>
@@ -51,7 +54,7 @@ openssl enc -d -base64 -aes-256-ecb -k $PASS_FIXED -in "$1" 2> /dev/null || cat 
 ```
 
 - .gitattributesで適用対象を決める
-イカのように設定するとそのファイルだけ対象となる
+以下のように設定するとそのファイルだけ対象となる
 ```
 encrypt/*.yml filter=openssl diff=openssl
 ```
@@ -63,9 +66,11 @@ $ git push /tmp/a.git/
 ```
 
 - cloneする側
+
 -- .passwordを秘密裏にコピーしてくる
+
 -- .git/configを編集
-イカの行を追加する
+以下の行を追加する
 ```
 [filter "openssl"]
     smudge = .gitencrypt/smudge_filter_openssl
