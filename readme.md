@@ -1,56 +1,70 @@
+- .passwordを作成
+-- saltは24 or less hex characters
+-- パスワードは適当に,イカのような.passwordファイルを作成する
+```
+<salt>
+<password>
+```
+-- .gitignoreに.passwordを追加、これは秘密裏にやりとりする
+
+- gitencryptの作成
 ```sh
 $ mkdir .gitencrypt
 $ cd .gitencrypt
 $ touch clean_filter_openssl smudge_filter_openssl diff_filter_openssl 
 $ chmod 755 *
 $ # edit three files
-$ git init
-$ git clone --bare . /tmp/a.git
-$ git push /tmp/a.git/
-$ # clone先で.git/configを修正
 ```
 
-- clean_filter_openssl
+-- clean_filter_openssl
 ```sh
 #!/bin/bash
 
-SALT_FIXED=<your-salt> # 24 or less hex characters
-PASS_FIXED=<your-passphrase>
+SALT_FIXED=`head -n 1 .password` # 24 or less hex characters
+PASS_FIXED="pass:`tail -n 1 .password`"
 
 openssl enc -base64 -aes-256-ecb -S $SALT_FIXED -k $PASS_FIXED
 ```
 
-- smudge_filter_openssl
+-- smudge_filter_openssl
 ```sh
 #!/bin/bash
 
 # No salt is needed for decryption.
-PASS_FIXED=<your-passphrase>
+PASS_FIXED="pass:`tail -n 1 .password`"
 
 # If decryption fails, use `cat` instead. 
 # Error messages are redirected to /dev/null.
 openssl enc -d -base64 -aes-256-ecb -k $PASS_FIXED 2> /dev/null || cat
 ```
 
-- diff_filter_openssl 
+-- diff_filter_openssl 
 ```sh
 #!/bin/bash
 
 # No salt is needed for decryption.
-PASS_FIXED=<your-passphrase>
+PASS_FIXED="pass:`tail -n 1 .password`"
 
 # Error messages are redirect to /dev/null.
 openssl enc -d -base64 -aes-256-ecb -k $PASS_FIXED -in "$1" 2> /dev/null || cat "$1"
 ```
 
-- .gitattributes
+- .gitattributesで適用対象を決める
+イカのように設定するとそのファイルだけ対象となる
 ```
-* filter=openssl diff=openssl
-[merge]
-    renormalize = true
+encrypt/*.yml filter=openssl diff=openssl
 ```
 
-- .git/config
+- 後は普通にPUSHすればOK
+```
+$ git clone --bare . /tmp/a.git
+$ git push /tmp/a.git/
+```
+
+- cloneする側
+-- .passwordを秘密裏にコピーしてくる
+-- .git/configを編集
+イカの行を追加する
 ```
 [filter "openssl"]
     smudge = .gitencrypt/smudge_filter_openssl
@@ -58,3 +72,4 @@ openssl enc -d -base64 -aes-256-ecb -k $PASS_FIXED -in "$1" 2> /dev/null || cat 
 [diff "openssl"]
     textconv = .gitencrypt/diff_filter_openssl
 ```
+-- `$ git reset --hard`
