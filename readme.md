@@ -5,6 +5,9 @@ $ touch clean_filter_openssl smudge_filter_openssl diff_filter_openssl
 $ chmod 755 *
 $ # edit three files
 $ git init
+$ git clone --bare . /tmp/a.git
+$ git push /tmp/a.git/
+$ # clone先で.git/configを修正
 ```
 
 - clean_filter_openssl
