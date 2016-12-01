@@ -5,7 +5,8 @@
 <salt>
 <password>
 ```
--- .gitignoreに.passwordを追加、これは秘密裏にやりとりする
+-- .gitignoreに.passwordを追加、このrepositoryは入れちゃってるけど,
+   これは秘密裏にやりとりする。バージョン管理しないこと!!
 
 - gitencryptの作成
 ```sh
