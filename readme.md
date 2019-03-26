@@ -53,7 +53,7 @@ $ git push /tmp/a.git/
 # cloneして持ってくる
 + cloneする
 + .passwordを秘密裏にコピーしてくる
-+ 上記.git/configにフィルタを設定と同じことをする
++ 上記.git/configにフィルタを設定と同じことをする(サブモジュールの場合は.git/modules下にあるconfig)
 + `$ git reset --hard`を実行(最初だけ)
 
 # 諸注意
