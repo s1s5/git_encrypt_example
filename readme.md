@@ -55,6 +55,7 @@ $ git push /tmp/a.git/
 + .passwordを秘密裏にコピーしてくる
 + 上記.git/configにフィルタを設定と同じことをする(サブモジュールの場合は.git/modules下にあるconfig)
 + `$ git reset --hard`を実行(最初だけ)
++ 上記で駄目な場合には、一旦暗号化されているファイルを全削除して、`$ git reset --hard`を行う
 
 # 諸注意
 - encryptされてない奴がはいっちゃったら消すしかないかも
