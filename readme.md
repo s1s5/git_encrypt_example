@@ -57,5 +57,8 @@ $ git push /tmp/a.git/
 + `$ git reset --hard`を実行(最初だけ)
 + 上記で駄目な場合には、一旦暗号化されているファイルを全削除して、`$ git reset --hard`を行う
 
+## submoduleの場合
++ `.git/modules/<submodule path>/config`に同様のことを書けばOK
+
 # 諸注意
 - encryptされてない奴がはいっちゃったら消すしかないかも
